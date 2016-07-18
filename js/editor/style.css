@@ -1,0 +1,62 @@
+body {
+    font: 13px sans-serif;
+    position: relative;
+    width: 960px;
+    height: 500px;
+    background-image: url("../../images/face1.png");
+    background-repeat: no-repeat;
+}
+
+form {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+rect {
+    fill: none;
+    pointer-events: all;
+}
+
+circle,
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+circle {
+    fill: #fff;
+    fill-opacity: .2;
+    cursor: move;
+}
+
+.selected {
+    fill: #ff7f0e;
+    stroke: #ff7f0e;
+}
+
+.svg {
+    border-style: dashed;
+    border-color: red;
+    position:absolute;
+    top:0px;
+    left:0px;    
+}
+
+.abs {
+    position:absolute;
+    top:0px;
+    left:0px;    
+}
+
+.metabuttondiv {
+    position:absolute;
+    top:520px;    
+}
+
+.outputdiv {
+    position:absolute;
+    top:600px;
+    background-color: lightgray;
+}
