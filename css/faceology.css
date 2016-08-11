@@ -1,0 +1,33 @@
+body{
+    text-align: center;
+}
+
+#header{
+    height: 200;
+    
+}
+
+.pagediv{
+    
+    height: 666;
+}
+
+#page1{
+    background-color: lightgrey;
+}
+
+/*#header p{
+    text-align: center;
+}
+
+#page3 #canvasDiv{
+    text-align: center;
+}
+
+*/
+#page4{
+}
+
+#footer{
+    text-align: center;
+}

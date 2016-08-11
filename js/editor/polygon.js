@@ -10,6 +10,7 @@ window.onload = function () {
         btn.innerHTML = name;
         document.getElementById("btndiv").appendChild(btn);
     }
+    selectPath(0);
 };
 
 
@@ -31,8 +32,8 @@ var calcFormattedPoints = function (_points) {
 
 
 //build svg
-var width = 350,
-        height = 500;
+var width = 500,
+        height = 666;
 
 
 var selectPath = function (_path) {
@@ -40,7 +41,7 @@ var selectPath = function (_path) {
     var btn = document.getElementById("bid" + selectedPath);
     btn.setAttribute("style", "color: black");
     selectedPath = _path;
-    svg.select("#path" + selectedPath).attr("visibility", "visible");
+    svg.select("#path" + selectedPath).attr("visibility", "visible").attr("style","fill:lime;fill-opacity:0.5");
     redraw();
     var btn = document.getElementById("bid" + selectedPath);
     btn.setAttribute("style", "color: red");

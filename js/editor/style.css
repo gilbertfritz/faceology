@@ -3,7 +3,7 @@ body {
     position: relative;
     width: 960px;
     height: 500px;
-    background-image: url("../../images/face1.png");
+    background-image: url("./0.png");
     background-repeat: no-repeat;
 }
 
@@ -52,11 +52,11 @@ circle {
 
 .metabuttondiv {
     position:absolute;
-    top:520px;    
+    top:680px;    
 }
 
 .outputdiv {
     position:absolute;
-    top:600px;
+    top:720px;
     background-color: lightgray;
 }
