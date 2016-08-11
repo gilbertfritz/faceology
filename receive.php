@@ -54,7 +54,6 @@ $colored_pixels = extract_colored_pixels($image, $polygons);
 $stats_line = generate_stats($colored_pixels, $now, $piclink, $postinfo);
 appendToStatsFile($statsfilename, $stats_line);
 
-
 function appendToStatsFile($stats_file, $stats_line) {
 // Write the contents to the file, 
 // using the FILE_APPEND flag to append the content to the end of the file
@@ -71,8 +70,18 @@ function generate_stats($colored_pixels, $now, $piclink, $postinfo) {
         $green = $areavalue["green"];
         $yellow = $areavalue["yellow"];
         $red = $areavalue["red"];
-//        $max = max($green, $yellow, $red);
-        $stats_line = $stats_line . ";" . $green . ";" . $yellow . ";" . $red;
+        $max = max($green, $yellow, $red);
+        $maxcolor = "blank";
+        if ($max > 100) {
+            if ($max == $red) {
+                $maxcolor = "red";
+            } else if ($max == $yellow) {
+                $maxcolor = "yellow";
+            } else if ($max == $green) {
+                $maxcolor = "green";
+            }
+        }
+        $stats_line = $stats_line . ";" . $maxcolor . ";" . $green . ";" . $yellow . ";" . $red;
     }
     return $stats_line . ";" . $piclink . "\n";
 }
