@@ -1,3 +1,6 @@
+
+//$("#canvasDiv").prototype.relMouseCoords = relMouseCoords;
+
 var drawingApp = (function () {
 
     "use strict";
@@ -30,9 +33,9 @@ var drawingApp = (function () {
             clickSize = [],
             clickDrag = [],
             paint = false,
-            curColor = colorRed,
+            curColor = colorGreen,
             curTool = "marker",
-            curSize = "large",
+            curSize = "huge",
             brushColor = colorGreen,
             mediumStartX = 18,
             mediumStartY = 19,
@@ -48,21 +51,38 @@ var drawingApp = (function () {
             sizeHotspotHeight = 36,
             totalLoadResources = 2,
             curLoadResNum = 0,
+            chosenface = "f1",
             sizeHotspotWidthObject = {
                 huge: 39,
                 large: 25,
                 normal: 18,
                 small: 16
             },
-    fuck = function () {
-
+    clearCanvas = function () {
+        context.clearRect(0, 0, canvas.width, canvas.height);
     },
-            clearCanvas = function () {
-                context.clearRect(0, 0, canvas.width, canvas.height);
+            relMouseCoords = function (_x, _y) {
+                var totalOffsetX = 0;
+                var totalOffsetY = 0;
+                var canvasX = 0;
+                var canvasY = 0;
+                var currentElement = canvas;
+
+                do {
+                    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
+                    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
+                } while (currentElement = currentElement.offsetParent)
+
+//                canvasX = _x - totalOffsetX;
+//                canvasY = _y - totalOffsetY;
+
+                canvasX = _x - totalOffsetX - document.body.scrollLeft;
+                canvasY = _y - totalOffsetY - document.body.scrollTop;
+
+                return {x: canvasX, y: canvasY}
             },
             // Redraws the canvas.
             redraw = function () {
-
                 var locX,
                         locY,
                         radius,
@@ -76,6 +96,8 @@ var drawingApp = (function () {
                 }
 
                 clearCanvas();
+
+
 
                 // For each point drawn
                 for (i = 0; i < clickX.length; i += 1) {
@@ -137,13 +159,36 @@ var drawingApp = (function () {
                 // Draw the outline image
                 context.drawImage(outlineImage, 0, 0);
                 context.drawImage(menuImage, 0, 0, 0.60 * menuImage.width, 0.60 * menuImage.height);
+
+                // Draw tool selection mark
+                if (curTool === "marker" && curColor === brushColor) {
+                    showMarkedTool(0);
+                } else if (curTool === "marker" && curColor === colorBlack) {
+                    showMarkedTool(1);
+                } else if (curTool === "eraser") {
+                    showMarkedTool(2);
+                }
+            },
+            showMarkedTool = function (idx) {
+                var offset = 5;
+                var scale = 0.60;
+                var linewidth = 3;
+                var menuSectionHeight = scale * 90;
+                var width = scale * menuImage.width;
+                var ystart = offset + idx * menuSectionHeight;
+                var yend = menuSectionHeight - 2 * offset;
+                context.rect(offset, ystart, width - 2 * offset, yend);
+                context.lineWidth = linewidth;
+                context.strokeStyle = "#00FF00";
+                context.stroke();
+                context.strokeStyle = curColor;
+                context.stroke();
             },
             // Adds a point to the drawing array.
             // @param x
             // @param y
             // @param dragging
             addClick = function (x, y, dragging) {
-
                 clickX.push(x);
                 clickY.push(y);
                 clickTool.push(curTool);
@@ -156,9 +201,13 @@ var drawingApp = (function () {
 
                 var press = function (e) {
                     // Mouse down location
-                    var sizeHotspotStartX,
-                            mouseX = (e.changedTouches ? e.changedTouches[0].pageX : e.pageX) - this.offsetLeft,
-                            mouseY = (e.changedTouches ? e.changedTouches[0].pageY : e.pageY) - this.offsetTop;
+                    var sizeHotspotStartX;
+//                            mouseX = (e.changedTouches ? e.changedTouches[0].pageX : e.pageX) - this.offsetLeft,
+//                            mouseY = (e.changedTouches ? e.changedTouches[0].pageY : e.pageY) - this.offsetTop;
+                    var coords = relMouseCoords(e.pageX, e.pageY);
+                    var mouseX = coords.x;
+                    var mouseY = coords.y;
+
 
                     var menuScale = 0.6;
                     var menuWidth = 130;
@@ -170,75 +219,54 @@ var drawingApp = (function () {
                         if (mouseY > menuSectionHeight * menuScale * 0 && mouseY < menuSectionHeight * menuScale * 1) {
                             curTool = "marker";
                             curColor = brushColor;
+                            curSize = "huge";
                         } else if (mouseY > menuSectionHeight * menuScale * 1 && mouseY < menuSectionHeight * menuScale * 2) {
                             curTool = "marker";
                             curColor = colorBlack;
+                            curSize = "large";
                         } else if (mouseY > menuSectionHeight * menuScale * 2 && mouseY < menuSectionHeight * menuScale * 3) {
                             curTool = "eraser";
+                            curSize = "huge";
+                            curColor = colorBlack;
                         } else if (mouseY > menuSectionHeight * menuScale * 3 && mouseY < menuSectionHeight * menuScale * 3 + 40 * menuColorSectionHeight) {
                             if (mouseX > ((menuWidth * menuScale) / 3) * 0 && mouseX < ((menuWidth * menuScale) / 3) * 1) {
                                 curTool = "marker";
                                 curColor = colorGreen;
                                 brushColor = curColor;
+                                curSize = "huge";
                             } else if (mouseX > ((menuWidth * menuScale) / 3) * 1 && mouseX < ((menuWidth * menuScale) / 3) * 2) {
                                 curTool = "marker";
                                 curColor = colorYellow;
                                 brushColor = curColor;
+                                curSize = "huge";
                             } else if (mouseX > ((menuWidth * menuScale) / 3) * 2 && mouseX < ((menuWidth * menuScale) / 3) * 3) {
                                 curTool = "marker";
                                 curColor = colorRed;
                                 brushColor = curColor;
+                                curSize = "huge";
                             }
                         }
 
-//                        if (mousey > mediumStartX) {
-//                            if (mouseY > mediumStartY && mouseY < mediumStartY + mediumImageHeight) {
-//                                curColor = colorPurple;
-//                            } else if (mouseY > mediumStartY + mediumImageHeight && mouseY < mediumStartY + mediumImageHeight * 2) {
-//                                curColor = colorGreen;
-//                            } else if (mouseY > mediumStartY + mediumImageHeight * 2 && mouseY < mediumStartY + mediumImageHeight * 3) {
-//                                curColor = colorYellow;
-//                            } else if (mouseY > mediumStartY + mediumImageHeight * 3 && mouseY < mediumStartY + mediumImageHeight * 4) {
-//                                curColor = colorBrown;
-//                            }
+// else if (mouseY > menuSectionHeight * menuScale * 3 && mouseY < menuSectionHeight * menuScale * 4) {
+//                            clickX = [];
+//                            clickY = [];
+//                            clickTool = [];
+//                            clickColor = [];
+//                            redraw();
 //                        }
-//                        curTool = "eraser";
+
                     }
-//                    else if (mouseX > drawingAreaX + drawingAreaWidth) { // Right of the drawing area
-//
-//                        if (mouseY > toolHotspotStartY) {
-//                            if (mouseY > sizeHotspotStartY) {
-//                                sizeHotspotStartX = drawingAreaX + drawingAreaWidth;
-//                                if (mouseY < sizeHotspotStartY + sizeHotspotHeight && mouseX > sizeHotspotStartX) {
-//                                    if (mouseX < sizeHotspotStartX + sizeHotspotWidthObject.huge) {
-//                                        curSize = "huge";
-//                                    } else if (mouseX < sizeHotspotStartX + sizeHotspotWidthObject.large + sizeHotspotWidthObject.huge) {
-//                                        curSize = "large";
-//                                    } else if (mouseX < sizeHotspotStartX + sizeHotspotWidthObject.normal + sizeHotspotWidthObject.large + sizeHotspotWidthObject.huge) {
-//                                        curSize = "normal";
-//                                    } else if (mouseX < sizeHotspotStartX + sizeHotspotWidthObject.small + sizeHotspotWidthObject.normal + sizeHotspotWidthObject.large + sizeHotspotWidthObject.huge) {
-//                                        curSize = "small";
-//                                    }
-//                                }
-//                            } else {
-//                                if (mouseY < toolHotspotStartY + toolHotspotHeight) {
-//                                    curTool = "crayon";
-//                                } else if (mouseY < toolHotspotStartY + toolHotspotHeight * 2) {
-//                                    curTool = "marker";
-//                                } else if (mouseY < toolHotspotStartY + toolHotspotHeight * 3) {
-//                                    curTool = "eraser";
-//                                }
-//                            }
-//                        }
-//                    }
                     paint = true;
                     addClick(mouseX, mouseY, false);
                     redraw();
                 },
                         drag = function (e) {
 
-                            var mouseX = (e.changedTouches ? e.changedTouches[0].pageX : e.pageX) - this.offsetLeft,
-                                    mouseY = (e.changedTouches ? e.changedTouches[0].pageY : e.pageY) - this.offsetTop;
+//                            var mouseX = (e.changedTouches ? e.changedTouches[0].pageX : e.pageX) - this.offsetLeft,
+//                                    mouseY = (e.changedTouches ? e.changedTouches[0].pageY : e.pageY) - this.offsetTop;
+                            var coords = relMouseCoords(e.pageX, e.pageY);
+                            var mouseX = coords.x;
+                            var mouseY = coords.y;
 
                             if (paint) {
                                 addClick(mouseX, mouseY, true);
@@ -294,10 +322,15 @@ var drawingApp = (function () {
 
                 // Load images
                 outlineImage.onload = resourceLoaded;
-                outlineImage.src = "images/faces/0.png";
+                outlineImage.src = "images/faces/f1.png";
 
                 menuImage.onload = resourceLoaded;
                 menuImage.src = "images/menusmall.png";
+            },
+            setface = function (face) {
+                chosenface = face;
+                outlineImage.src = "images/faces/" + face + ".png";
+                redraw();
             },
             send = function () {
                 var dataURL = canvas.toDataURL();
@@ -308,12 +341,14 @@ var drawingApp = (function () {
                 var prof = jQuery("#profinput").val();
                 var mail = jQuery("#mailinput").val();
                 var info = name + ";" + age + ";" + town + ";" + prof + ";" + mail + ";";
+                var face = chosenface;
 
                 jQuery.ajax({
                     type: "POST",
                     url: "receive.php",
                     data: {
                         imgBase64: dataURL,
+                        face: face,
                         info: info
                     }
                 }).done(function (o) {
@@ -324,6 +359,7 @@ var drawingApp = (function () {
 
     return {
         init: init,
-        send: send
+        send: send,
+        setface: setface
     };
 }());

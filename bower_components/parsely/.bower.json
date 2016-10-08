@@ -1,0 +1,32 @@
+{
+  "name": "parsely",
+  "homepage": "https://github.com/Anfa-am/parsley",
+  "authors": [
+    "Anfa Abukar <developer@anfa.io>"
+  ],
+  "description": "Make HTML great again - client side logicless partials",
+  "main": "parsely.js",
+  "keywords": [
+    "partials",
+    "html",
+    "ajax"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "8c0bf33efa",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "8c0bf33efa707252924536eacad1f41c0f75a7cc"
+  },
+  "_source": "https://github.com/Anfa-am/parsley.git",
+  "_target": "*",
+  "_originalSource": "parsely",
+  "_direct": true
+}

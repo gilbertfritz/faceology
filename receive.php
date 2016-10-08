@@ -19,16 +19,16 @@ define('FACEREGION_NECK', '12');
 define('IMAGE_WIDTH', '500');
 define('IMAGE_HEIGHT', '666');
 
-        const STATS_HEADLINE = "date;sum_green;sum_yellow;sum_red;" .
-        "hair_green;hair_yellow;hair_red;" .
-        "forehead_green;forehead_yellow;forehead_red;" .
-        "eyes_green;eyes_yellow;eyes_red;" .
-        "nose_green;nose_yellow;nose_red;" .
-        "cheeks_green;cheeks_yellow;cheeks_red;" .
-        "mouth_green;mouth_yellow;mouth_red;" .
-        "chin_green;chin_yellow;chin_red;" .
-        "ears_green;ears_yellow;ears_red;" .
-        "neck_green;neck_yellow;neck_red;";
+//        const STATS_HEADLINE = "date;sum_green;sum_yellow;sum_red;" .
+//        "hair_green;hair_yellow;hair_red;" .
+//        "forehead_green;forehead_yellow;forehead_red;" .
+//        "eyes_green;eyes_yellow;eyes_red;" .
+//        "nose_green;nose_yellow;nose_red;" .
+//        "cheeks_green;cheeks_yellow;cheeks_red;" .
+//        "mouth_green;mouth_yellow;mouth_red;" .
+//        "chin_green;chin_yellow;chin_red;" .
+//        "ears_green;ears_yellow;ears_red;" .
+//        "neck_green;neck_yellow;neck_red;";
 
         const AREA_MAPPING = array("outline", "hair", "forehead", "eyes", "eyes", "nose", "cheeks", "cheeks", "mouth", "chin", "ears", "ears", "neck");
         const COLOR_RED = array("red" => 255, "green" => 0, "blue" => 0);
@@ -41,6 +41,7 @@ define('IMAGE_HEIGHT', '666');
 
 $postimg = $_POST['imgBase64'];
 $postinfo = $_POST['info'];
+$postface = $_POST['face'];
 
 $now = date("d.m.Y");
 $uniqid = uniqid();
@@ -49,9 +50,9 @@ $picfilename = PICSFOLDER . "/" . $now . "_" . $uniqid . ".png";
 $piclink = DOMAIN . $picfilename;
 decode_and_save_image($postimg, $picfilename);
 $image = imagecreatefrompng($picfilename);
-$polygons = create_array_from_json(file_get_contents("polygondata/data.json"));
+$polygons = create_array_from_json(file_get_contents("polygondata/" . $postface . ".json"));
 $colored_pixels = extract_colored_pixels($image, $polygons);
-$stats_line = generate_stats($colored_pixels, $now, $piclink, $postinfo);
+$stats_line = generate_stats($colored_pixels, $now, $piclink, $postinfo, $postface);
 appendToStatsFile($statsfilename, $stats_line);
 
 function appendToStatsFile($stats_file, $stats_line) {
@@ -61,10 +62,11 @@ function appendToStatsFile($stats_file, $stats_line) {
     file_put_contents($stats_file, $stats_line, FILE_APPEND | LOCK_EX);
 }
 
-function generate_stats($colored_pixels, $now, $piclink, $postinfo) {
+function generate_stats($colored_pixels, $now, $piclink, $postinfo, $postface) {
     $color_sums = $colored_pixels["color_sums"];
     $color_area = $colored_pixels["color_area"];
     $stats_line = $now . ";" . $postinfo;
+    $stats_line = $stats_line . $postface . ";";
     $stats_line = $stats_line . $color_sums["green"] . ";" . $color_sums["yellow"] . ";" . $color_sums["red"];
     foreach ($color_area as $areakey => $areavalue) {
         $green = $areavalue["green"];
