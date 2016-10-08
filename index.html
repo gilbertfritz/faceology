@@ -62,11 +62,12 @@
                         <div class="col-xs-8 col-xs-offset-2">
                             <form data-parsley-validate="">
                                 <div id="formdiv">
-                                    Name*: <input id="nameinput" type="text" class="form-control" name="email" data-parsley-trigger="change" required=""><br />
-                                    Age*:<input id="ageinput" type="number" class="form-control" name="age" data-parsley-trigger="change" required=""><br />
-                                    Town:<input id="towninput" type="text" class="form-control" name="town" data-parsley-trigger="change"><br />
-                                    Profession:<input id="profinput" type="text" class="form-control" name="prof" data-parsley-trigger="change"><br />
-                                    Email*:<input id="mailinput" type="email" class="form-control" name="email" data-parsley-trigger="change" required=""><br />
+                                    <input type="checkbox" name="agreement" data-parsley-mincheck="1" required=""><p>I hereby agree ...</p>
+                                    <input id="nameinput" placeholder="Name*" type="text" class="form-control" name="email" data-parsley-trigger="change" required=""><br />
+                                    <input id="ageinput" placeholder="Age*" type="number" class="form-control" name="age" data-parsley-trigger="change" required=""><br />
+                                    <input id="towninput" placeholder="Town" type="text" class="form-control" name="town" data-parsley-trigger="change"><br />
+                                    <input placeholder="Profession" id="profinput" type="text" class="form-control" name="prof" data-parsley-trigger="change"><br />
+                                    <input placeholder="Email*" id="mailinput" type="email" class="form-control" name="email" data-parsley-trigger="change" required=""><br />
                                     <button type="submit">SEND</button>
                                 </div>
                             </form>
@@ -87,7 +88,7 @@
 
         <!--[if IE]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
         <script type="text/javascript" src="js/lib/jquery-3.1.0.min.js"></script>
-        <script type="text/javascript" src="bower_components/parsely/parsley.min.js"></script>
+        <script type="text/javascript" src="bower_components/parsely/parsley.js"></script>
         <script type="text/javascript" src="js/draw/draw.js"></script>
         <script type="text/javascript" src="js/nav.js"></script>
         <script type="text/javascript">

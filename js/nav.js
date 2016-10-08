@@ -45,8 +45,7 @@ jQuery(document).ready(function ($) {
         drawingApp.setface(id);
     });
 
-    $("form").parsley()
-            .on('form:submit', function () {
+    $("form").submit(function () {
                 $("form").hide();
                 $(".thanks").show();
                 drawingApp.send();
